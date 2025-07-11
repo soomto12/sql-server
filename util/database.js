@@ -1,8 +1,35 @@
-const Sequelize = require('sequelize').Sequelize;
+const Mongodb = require("mongodb")
+const MongoClient = Mongodb.MongoClient
 
-const sequelize = new Sequelize('sys', 'root', 'blockchain', {
-  dialect: 'mysql',
-  host: 'localhost'
+let _db 
+
+function mongoConnect (callback){
+MongoClient.connect('mongodb+srv://somto:blockchain@cluster0.gocxpde.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0')
+.then((result)=>{
+  console.log("connect");
+  _db = result.db();
+  callback();
+})
+.catch((err)=>{
+console.log(err);
 });
+}
 
-module.exports = sequelize;
+function GetDB(){
+if (_db) {
+  return _db
+
+} 
+throw "No dataBase found";
+
+};
+
+
+
+
+exports.mongoConnect = mongoConnect;
+
+exports.GetDB = GetDB;
+
+
+
